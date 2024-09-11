@@ -3,6 +3,10 @@ package com.jellyfish.composeproject
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
+//import coil.compose.rememberAsyncImagePainter //Para imagens web
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,16 +20,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jellyfish.composeproject.ui.theme.ComposeProjectTheme
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            MyScreen()
-            Counter()
+            Row {
+                MyScreen()
+                LocalImageExample()
+                Counter()
+
+            }
         }
     }
 }
@@ -36,13 +49,13 @@ fun MessageCard(name:String){
 
 }
 
-//@Composable
-//fun MyScreen(){
-//    Column {
-//        MessageCard("Ladino")
-//        MessageCard("Mago")
-//    }
-//}
+@Composable
+fun MyScreen(){
+    Column {
+        MessageCard("Ladino")
+        MessageCard("Mago")
+    }
+}
 
 @Composable
 fun Counter(){
@@ -57,6 +70,15 @@ fun Counter(){
             Text(text = "Aumentar")
         }
     }
+}
+
+
+@Composable
+fun LocalImageExample(){
+    Image(
+        painter = painterResource(id = R.drawable.inuyasha),
+        contentDescription = null
+    )
 }
 
 //@Composable
