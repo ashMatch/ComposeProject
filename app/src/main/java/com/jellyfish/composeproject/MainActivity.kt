@@ -1,6 +1,7 @@
 package com.jellyfish.composeproject
 
 import android.os.Bundle
+import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,9 +26,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jellyfish.composeproject.ui.theme.ComposeProjectTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
@@ -39,69 +45,43 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MassCalculatorApp()
+            togglableScreen()
         }
-    }
-
-    @Composable
-    private fun MassCalculatorApp() {
-        var heightInput by remember { mutableStateOf("") }
-        var weightInput by remember { mutableStateOf("") }
-        var result by remember { mutableStateOf<Int?>(null) }
-        var isSubmitted by remember { mutableStateOf(false) }
-
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            if (!isSubmitted){
-                // Inputs para altura e peso
-                BasicTextField(
-                    value = heightInput,
-                    onValueChange = {heightInput = it},
-                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
-                BasicTextField(
-                    value = weightInput,
-                    onValueChange = {weightInput = it},
-                    textStyle = TextStyle(fontSize = 18.sp, color = Color.Black),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
-
-                Button(onClick = {
-                    // Conversão dos valores de entrada e cálculo da massa
-                    val height = heightInput.toIntOrNull() ?: 0
-                    val weight = weightInput.toIntOrNull() ?: 0
-                    result = height*weight
-                    isSubmitted = true
-                }) {
-                    Text("Calcular")
-
-                }
-            } else {
-                // Exibindo os valores inseridos e o resultado do cálculo
-                Text("Altura: $heightInput", fontSize = 20.sp)
-                Text("Peso: $weightInput", fontSize = 20.sp)
-                Text("Massa: ${result ?: 0}", fontSize = 24.sp, color = Color.Blue)
-
-                // Exibição da imagem logo abaixo do resultado
-                Image(
-                    painter = painterResource(id = R.drawable.inuyasha),
-                    contentDescription =null,
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .size(150.dp)
-                )
-            }
-        }
-
     }
 }
+
+        @Composable
+        fun togglableScreen(){
+            // Estado para controlar a visibilidade do texto e da imagem
+            var isVisible by remember { mutableStateOf(true) }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ){
+                if(isVisible){
+                    Image(
+                        painter = painterResource(id = R.drawable.congratulation),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .height(120.dp)
+                            .width(240.dp)
+                            .background(Color.DarkGray)
+                            .padding(2.dp)
+                        )
+                    Text("Parabens voce consegue enxergar!!", modifier = Modifier.padding(4.dp))
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(
+                    onClick = { isVisible = !isVisible },
+                    shape = RoundedCornerShape(16.dp)
+                    ) {
+                    Text(text = if (isVisible) "Esconder" else "Mostrar")
+                }
+            }
+        }
